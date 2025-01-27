@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .room-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .room-card h3 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+
+        .room-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .room-card .price {
+            font-weight: bold;
+            color: #1e88e5;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Room List</h1>
+    <div class="room-grid" id="roomGrid">
+        <!-- Cards will be injected here -->
+    </div>
+</div>
+
+<script>
+    // Function to fetch room data and populate the grid
+    async function fetchRooms() {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/room');
+            if (!response.ok) {
+                throw new Error('Failed to fetch room data');
+            }
+
+            const rooms = await response.json();
+            const roomGrid = document.getElementById('roomGrid');
+
+            // Clear any existing content
+            roomGrid.innerHTML = '';
+
+            // Loop through the room data and create cards
+            rooms.forEach(room => {
+                const card = document.createElement('div');
+                card.className = 'room-card';
+
+                card.innerHTML = `
+            <h3>${room.name}</h3>
+            <p>Type: ${room.type}</p>
+            <p>Description: ${room.description}</p>
+            <p class="price">Price: $${room.price}</p>
+          `;
+
+                roomGrid.appendChild(card);
+            });
+        } catch (error) {
+            console.error('Error fetching rooms:', error);
+        }
+    }
+
+    // Fetch rooms on page load
+    fetchRooms();
+</script>
+</body>
+</html>
