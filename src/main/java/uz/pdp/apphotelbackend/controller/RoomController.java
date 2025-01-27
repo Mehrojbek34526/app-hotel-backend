@@ -1,8 +1,6 @@
 package uz.pdp.apphotelbackend.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.pdp.apphotelbackend.model.RoomDTO;
 import uz.pdp.apphotelbackend.utils.AppConstants;
 
@@ -26,6 +24,12 @@ public class RoomController {
     @GetMapping
     public List<RoomDTO> read(){
         return rooms;
+    }
+
+    @PostMapping
+    public RoomDTO create(@RequestBody RoomDTO roomDTO) {
+        rooms.add(roomDTO);
+        return roomDTO;
     }
 
 
